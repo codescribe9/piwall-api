@@ -1,0 +1,39 @@
+{
+  "name": "piwall-api",
+  "version": "1.0.0",
+  "description": "Creating a RESTful API for my piwall",
+  "main": "server.js",
+  "scripts": {
+    "compile": "rimraf lib/ && babel -d api.es6/ api/",
+    "start": "npm run compile && node server.js",
+    "startmon": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codescribe9/piwall-api.git"
+  },
+  "author": "Venkata Rapaka",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/codescribe9/piwall-api/issues"
+  },
+  "homepage": "https://github.com/codescribe9/piwall-api#readme",
+  "dependencies": {
+    "bcrypt": "^1.0.3",
+    "body-parser": "^1.18.2",
+    "build-url": "^1.0.10",
+    "dotenv": "^5.0.0",
+    "express": "^4.16.2",
+    "jsonwebtoken": "^8.1.1",
+    "moment": "^2.20.1",
+    "mongoose": "^5.0.7",
+    "morgan": "^1.9.0",
+    "multer": "^1.3.0",
+    "query-string": "^5.1.0",
+    "request": "^2.83.0",
+    "uuid": "^3.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.15.1"
+  }
+}
