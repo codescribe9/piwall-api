@@ -1,113 +1,128 @@
-'use strict'
-const req = require('request')
-const moment = require('moment')
-const queryString = require('query-string')
+'use strict';
 
-const truthyOrZero = value => !!value || parseFloat(value) === 0
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-class DarkSky {
-  constructor(apiKey) {
-    this.apiKey = apiKey
-    this.long = null
-    this.lat = null
-    this.t = null
-    this.query = {}
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var req = require('request');
+var moment = require('moment');
+var queryString = require('query-string');
+
+var truthyOrZero = function truthyOrZero(value) {
+  return !!value || parseFloat(value) === 0;
+};
+
+var DarkSky = function () {
+  function DarkSky(apiKey) {
+    _classCallCheck(this, DarkSky);
+
+    this.apiKey = apiKey;
+    this.long = null;
+    this.lat = null;
+    this.t = null;
+    this.query = {};
   }
 
-  longitude(long) {
-    !truthyOrZero(long) ? null : (this.long = long)
-    return this
-  }
+  _createClass(DarkSky, [{
+    key: 'longitude',
+    value: function longitude(long) {
+      !truthyOrZero(long) ? null : this.long = long;
+      return this;
+    }
+  }, {
+    key: 'latitude',
+    value: function latitude(lat) {
+      !truthyOrZero(lat) ? null : this.lat = lat;
+      return this;
+    }
+  }, {
+    key: 'coordinates',
+    value: function coordinates(_ref) {
+      var lat = _ref.lat,
+          lng = _ref.lng;
 
-  latitude(lat) {
-    !truthyOrZero(lat) ? null : (this.lat = lat)
-    return this
-  }
+      this.lat = parseFloat(lat);
+      this.long = parseFloat(lng);
+      return this;
+    }
+  }, {
+    key: 'time',
+    value: function time(_time) {
+      !truthyOrZero(_time) ? null : this.t = moment(new Date(_time)).format('YYYY-MM-DDTHH:mm:ss');
+      return this;
+    }
+  }, {
+    key: 'units',
+    value: function units(unit) {
+      !unit ? null : this.query.units = unit;
+      return this;
+    }
+  }, {
+    key: 'language',
+    value: function language(lang) {
+      !lang ? null : this.query.lang = lang;
+      return this;
+    }
+  }, {
+    key: 'exclude',
+    value: function exclude(blocks) {
+      blocks = Array.isArray(blocks) ? blocks.join(',') : blocks;
+      !blocks ? null : this.query.exclude = blocks;
+      return this;
+    }
+  }, {
+    key: 'extendHourly',
+    value: function extendHourly(param) {
+      !param ? null : this.query.extend = 'hourly';
+      return this;
+    }
+  }, {
+    key: 'options',
+    value: function options(_options) {
+      var _this = this;
 
-  coordinates({ lat, lng }) {
-    this.lat = parseFloat(lat)
-    this.long = parseFloat(lng)
-    return this
-  }
-
-  time(time) {
-    !truthyOrZero(time)
-      ? null
-      : (this.t = moment(new Date(time)).format('YYYY-MM-DDTHH:mm:ss'))
-    return this
-  }
-
-  units(unit) {
-    !unit ? null : (this.query.units = unit)
-    return this
-  }
-
-  language(lang) {
-    !lang ? null : (this.query.lang = lang)
-    return this
-  }
-
-  exclude(blocks) {
-    blocks = Array.isArray(blocks) ? blocks.join(',') : blocks
-    !blocks ? null : (this.query.exclude = blocks)
-    return this
-  }
-
-  extendHourly(param) {
-    !param ? null : (this.query.extend = 'hourly')
-    return this
-  }
-
-  options(options) {
-    // get methods of "this" to invoke later
-    let methods = Object.getOwnPropertyNames(
-      Object.getPrototypeOf(this)
-    ).filter(
-      method =>
-        method !== 'constructor' &&
-        method !== 'get' &&
-        method !== 'options' &&
-        method.indexOf('_') === -1
-    )
-    // get keys of options object passed
-    return Object.keys(options).reduce((acc, val) => {
-      // ignore methods that do not exist
-      if (methods.indexOf(val) > -1) {
-        //  invoke setter methods with values of option
-        return this[val](options[val])
-      }
-    }, this)
-  }
-
-  _generateReqUrl() {
-    this.url = `https://api.darksky.net/forecast/${this.apiKey}/${this
-      .lat},${this.long}`
-    this.t ? (this.url += `,${this.t}`) : this.url
-    this.query
-      ? (this.url += `?${queryString.stringify(this.query)}`)
-      : this.url
-  }
-
-  get() {
-    return new Promise((resolve, reject) => {
-      if (!truthyOrZero(this.lat) || !truthyOrZero(this.long))
-        reject('Request not sent. ERROR: Longitute or Latitude is missing.')
-      this._generateReqUrl()
-
-      req({ url: this.url, json: true }, (err, res, body) => {
-        if (err) {
-          reject(`Forecast cannot be retrieved. ERROR: ${err}`)
-          return
+      // get methods of "this" to invoke later
+      var methods = Object.getOwnPropertyNames(Object.getPrototypeOf(this)).filter(function (method) {
+        return method !== 'constructor' && method !== 'get' && method !== 'options' && method.indexOf('_') === -1;
+      });
+      // get keys of options object passed
+      return Object.keys(_options).reduce(function (acc, val) {
+        // ignore methods that do not exist
+        if (methods.indexOf(val) > -1) {
+          //  invoke setter methods with values of option
+          return _this[val](_options[val]);
         }
-        res.statusCode !== 200
-          ? reject(
-              `Forecast cannot be retrieved. Response: ${res.statusCode} ${res.statusMessage}`
-            )
-          : null
-        resolve(body)
-      })
-    })
-  }
-}
+      }, this);
+    }
+  }, {
+    key: '_generateReqUrl',
+    value: function _generateReqUrl() {
+      this.url = 'https://api.darksky.net/forecast/' + this.apiKey + '/' + this.lat + ',' + this.long;
+      this.t ? this.url += ',' + this.t : this.url;
+      this.query ? this.url += '?' + queryString.stringify(this.query) : this.url;
+    }
+  }, {
+    key: 'get',
+    value: function get() {
+      var _this2 = this;
 
-module.exports = DarkSky
+      return new Promise(function (resolve, reject) {
+        if (!truthyOrZero(_this2.lat) || !truthyOrZero(_this2.long)) reject('Request not sent. ERROR: Longitute or Latitude is missing.');
+        _this2._generateReqUrl();
+
+        req({ url: _this2.url, json: true }, function (err, res, body) {
+          if (err) {
+            reject('Forecast cannot be retrieved. ERROR: ' + err);
+            return;
+          }
+          res.statusCode !== 200 ? reject('Forecast cannot be retrieved. Response: ' + res.statusCode + ' ' + res.statusMessage) : null;
+          resolve(body);
+        });
+      });
+    }
+  }]);
+
+  return DarkSky;
+}();
+
+module.exports = DarkSky;

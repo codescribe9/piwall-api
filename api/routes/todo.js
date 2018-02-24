@@ -1,8 +1,11 @@
-const express = require('express')
-const router = express.Router()
+'use strict';
 
-const TodoController = require('../controllers/todo')
+var express = require('express');
+var router = express.Router();
 
-router.get("/", TodoController.getTodoList)
+var TodoController = require('../controllers/todo');
+
+router.get("/", TodoController.getItems);
+router.get("/projects", TodoController.getProjects);
 
 module.exports = router;

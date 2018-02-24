@@ -1,8 +1,10 @@
-const express = require('express')
-const router = express.Router()
+'use strict';
 
-const ForecastController = require('../controllers/forecast')
+var express = require('express');
+var router = express.Router();
 
-router.get("/", ForecastController.getWeather)
+var ForecastController = require('../controllers/forecast');
+
+router.get("/", ForecastController.getWeather);
 
 module.exports = router;
