@@ -10,23 +10,25 @@ exports.getWeather = (req, res, next) => {
         .extendHourly(true)             // optional: extend, boolean, refer to API documentation.
         .get()                          // execute your get request.
         .then(data => {
-            res.status(200).json({
-                currently: {
-                    'temp': data.currently.temperature,
-                    'time': data.currently.time,
-                    'summary': data.currently.summary,
-                    'icon': data.currently.icon,
-                },
-                hourly: {
-                    'summary': data.hourly.summary,
-                    'icon': data.hourly.icon,
-                },
-                daily: {
-                    'summary': data.daily.summary,
-                    'icon': data.daily.icon,
-                },
-                alerts: data.alerts
-            })
+            res.status(200).json({data});
+
+            // res.status(200).json({
+            //     currently: {
+            //         'temp': data.currently.temperature,
+            //         'time': data.currently.time,
+            //         'summary': data.currently.summary,
+            //         'icon': data.currently.icon,
+            //     },
+            //     hourly: {
+            //         'summary': data.hourly.summary,
+            //         'icon': data.hourly.icon,
+            //     },
+            //     daily: {
+            //         'summary': data.daily.summary,
+            //         'icon': data.daily.icon,
+            //     },
+            //     alerts: data.alerts
+            // })
         })
         .catch(err => {
             res.status(500).json({
