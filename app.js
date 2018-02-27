@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 
 const forecastRoutes = require('./api/routes/forecast')
 const todoRoutes = require('./api/routes/todo')
+const quotesRoutes = require('./api/routes/quotes')
 
 app.use(morgan('dev'))
 app.use(bodyParser.urlencoded({extended: false}))
@@ -27,6 +28,7 @@ app.use((req, res, next) => {
 // Routes which should handle requests
 app.use("/forecast", forecastRoutes);
 app.use("/todo", todoRoutes);
+app.use("/quotes", quotesRoutes);
 
 app.use((req, res, next) => {
   const error = new Error("Not found");
