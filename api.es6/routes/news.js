@@ -13,6 +13,6 @@ const NewsController = require('../controllers/news')
 // higher-order function returns false for responses of other status codes (e.g. 403, 404, 500, etc)
 const onlyStatus200 = (req, res) => res.statusCode === 200
 
-router.get("/", cache('5 seconds', onlyStatus200), NewsController.getNews)
+router.get("/", cache('4 hours', onlyStatus200), NewsController.getNews)
 
 module.exports = router;

@@ -21,7 +21,16 @@ exports.getNews = (req, res, next) => {
     //console.log($);
     var news = Array();
     $('.index-article.grid-item').each(function(i, elem) {
-        news[i] = $(this).html();
+        var item = $(this);
+        var newsItem = {};
+        newsItem.html = $(this)[0].outerHTML;
+        newsItem.title = item.find('h2').text();
+        var contentHtml = '';
+        item.find('p').each(function() {
+          contentHtml += `<p>${$(this).html()}</p>`;
+        });
+       newsItem.content = contentHtml;
+        news[i] = newsItem;
       });
 
       res.status(200).json({
